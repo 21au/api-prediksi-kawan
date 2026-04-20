@@ -8,10 +8,13 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir six
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN grep -v "pygrowup" requirements.txt > req_modern.txt && \
+    pip install --no-cache-dir -r req_modern.txt
+
+RUN pip install --no-cache-dir six && \
+    pip install --no-cache-dir --no-build-isolation pygrowup==0.8.2
 
 COPY . .
 
